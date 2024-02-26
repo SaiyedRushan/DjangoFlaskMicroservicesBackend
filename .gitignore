@@ -1,0 +1,17 @@
+vscode/
+__pycache__/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+docs/_build/
+dist/
+.env
+.venv
+env/
+venv/
+
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
