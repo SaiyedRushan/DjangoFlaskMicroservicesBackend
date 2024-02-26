@@ -1,10 +1,12 @@
 import pika, json, os, django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin.settings")
+django.setup()
+
 from dotenv import load_dotenv
 from products.models import Product
 
 load_dotenv()
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin.settings")
-django.setup()
 
 params = pika.URLParameters(os.getenv("RABBITMQ_URL"))
 connection = pika.BlockingConnection(params)

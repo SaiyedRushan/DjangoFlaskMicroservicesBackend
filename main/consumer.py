@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 import os
 from main import Product, db
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin.settings")
 load_dotenv()
 
 params = pika.URLParameters(os.getenv("RABBITMQ_URL"))
