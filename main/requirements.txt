@@ -7,3 +7,4 @@ Flask-Cors
 requests
 mysqlclient
 pika
+python-dotenv
