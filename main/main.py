@@ -42,7 +42,7 @@ def index():
 
 @app.route("/api/products/<int:id>/like", methods=["POST"])
 def like(id):
-    req = requests.get("http://docker.for.windows.localhost:8000/api/user")
+    req = requests.get("http://host.docker.internal:8000/api/user")
     json = req.json()
 
     try:
