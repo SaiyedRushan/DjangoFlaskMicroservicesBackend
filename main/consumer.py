@@ -1,7 +1,7 @@
 import pika, json
 from dotenv import load_dotenv
 import os
-from main import Product, db
+from main import Product, db, app
 
 load_dotenv()
 
@@ -15,25 +15,25 @@ def callback(ch, method, properties, body):
     print("Received in main")
     data = json.loads(body)
     print(data)
+    with app.app_context():
+        if properties.content_type == "product_created":
+            product = Product(id=data["id"], title=data["title"], image=data["image"])
+            db.session.add(product)
+            db.session.commit()
+            print("Product Created")
 
-    if properties.content_type == "product_created":
-        product = Product(id=data["id"], title=data["title"], image=data["image"])
-        db.session.add(product)
-        db.session.commit()
-        print("Product Created")
+        elif properties.content_type == "product_updated":
+            product = Product.query.get(data["id"])
+            product.title = data["title"]
+            product.image = data["image"]
+            db.session.commit()
+            print("Product Updated")
 
-    elif properties.content_type == "product_updated":
-        product = Product.query.get(data["id"])
-        product.title = data["title"]
-        product.image = data["image"]
-        db.session.commit()
-        print("Product Updated")
-
-    elif properties.content_type == "product_deleted":
-        product = Product.query.get(data)
-        db.session.delete(product)
-        db.session.commit()
-        print("Product Deleted")
+        elif properties.content_type == "product_deleted":
+            product = Product.query.get(data)
+            db.session.delete(product)
+            db.session.commit()
+            print("Product Deleted")
 
 
 channel.basic_consume(queue="main", on_message_callback=callback, auto_ack=True)
